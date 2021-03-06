@@ -1,0 +1,6 @@
+## Title: Decon Assist
+## APIVersion: 100025
+## SavedVariables: DeconAssistSavedVariables
+
+DeconAssist.xml
+DeconAssist.lua
