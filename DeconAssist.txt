@@ -1,6 +1,8 @@
 ## Title: Decon Assist
-## APIVersion: 100025
+## Version: 0.1
+## APIVersion: 100034
+## Author: Sara (confuddled_squirrel)
+## Description: Tracks what you get from deconstructing items
 ## SavedVariables: DeconAssistSavedVariables
 
-DeconAssist.xml
 DeconAssist.lua
