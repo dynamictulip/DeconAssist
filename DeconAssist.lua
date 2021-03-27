@@ -1,6 +1,8 @@
 DeconAssist = {}
 
 DeconAssist.name = "DeconAssist"
+DeconAssist.variableVersion = 2
+DeconAssist.default = {}
 
 function DeconAssist:GetBagItemsThatCouldBeDeconstructed(craftStationType, bagId)
 
@@ -28,7 +30,8 @@ function DeconAssist:WorkOutWhatWasDeconstructed(craftStationType, bagId)
 
   --Whatever is left is what has been deconstructed
   for i, v in pairs(DeconAssist.itemsThatCouldBeDeconstructed[bagId]) do
-    d("You deconstructed "..v)
+    --d("You deconstructed "..v)
+    return v
   end
 end
 
@@ -38,8 +41,9 @@ function DeconAssist:OnCraftingStarted(craftStationType)
     return
   end
 
-  d("Started crafting " .. craftStationType)
+  --d("Started crafting " .. craftStationType)
   DeconAssist.isCrafting = true
+  DeconAssist.gotItems = {}
 
   --Clear local bag store
   DeconAssist.itemsThatCouldBeDeconstructed = {}
@@ -51,16 +55,29 @@ function DeconAssist:OnCraftingStarted(craftStationType)
 end
 
 function DeconAssist:OnCraftingCompleted(craftStationType)
-  
+
   if craftStationType == CRAFTING_TYPE_ALCHEMY or craftStationType == CRAFTING_TYPE_PROVISIONING then
     return
   end
 
   --Work out what was deconstructed
-  DeconAssist:WorkOutWhatWasDeconstructed(craftStationType, BAG_BACKPACK)
-  DeconAssist:WorkOutWhatWasDeconstructed(craftStationType, BAG_BANK)
+  local deconstructedItem = DeconAssist:WorkOutWhatWasDeconstructed(craftStationType, BAG_BACKPACK)
+  if deconstructedItem == nil then
+    deconstructedItem = DeconAssist:WorkOutWhatWasDeconstructed(craftStationType, BAG_BANK)
+  end
 
-  d("Completed crafting " .. craftStationType)
+  --Save results from a deconstructed item
+  if deconstructedItem ~= nil then
+    if DeconAssist.savedVariables[deconstructedItem] == nil then
+      DeconAssist.savedVariables[deconstructedItem] = {}
+    end
+
+    for index, value in ipairs(DeconAssist.gotItems) do      
+      table.insert(DeconAssist.savedVariables[deconstructedItem], value)
+    end
+  end
+
+  --d("Completed crafting " .. craftStationType)
   DeconAssist.isCrafting = false
 
 end
@@ -69,7 +86,8 @@ function DeconAssist:OnInventoryChange(bagId, slotIndex, isNewItem, itemSoundCat
   local link = GetItemLink(bagId, slotIndex)
 
   if DeconAssist.isCrafting and updateReason == INVENTORY_UPDATE_REASON_DEFAULT and stackCountChange > 0 then
-    d("You got a " .. link .. ".")
+    --d("You got a " .. link .. ".")
+    table.insert(DeconAssist.gotItems, link)
   end
 
 end
@@ -85,7 +103,7 @@ function DeconAssist:Initialize()
   DeconAssist.isCrafting = false
 
   -- Set up initial variable structure
-  self.savedVariables = ZO_SavedVars:NewAccountWide("DeconAssistSavedVariables", 1, nil, {})
+  DeconAssist.savedVariables = ZO_SavedVars:NewAccountWide("DeconAssistSavedVariables", DeconAssist.variableVersion, nil, DeconAssist.default)
 end
 
 function DeconAssist.OnAddOnLoaded(event, addonName)
