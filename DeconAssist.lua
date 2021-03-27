@@ -1,8 +1,29 @@
 DeconAssist = {}
 
 DeconAssist.name = "DeconAssist"
-DeconAssist.variableVersion = 2
+DeconAssist.variableVersion = 3
 DeconAssist.default = {}
+
+--[[
+  {
+    <crafting station type1> = {
+      <item1> = {
+        "count" = <x>
+        "items" = {
+          <item1> = <x>,
+          <item2> = <x>,
+        }
+      }
+    }
+  }
+--]]
+
+function DeconAssist:SetUpSavedVarTable(var)
+  if var == nil then
+    var = {}
+  end
+  return var
+end
 
 function DeconAssist:GetBagItemsThatCouldBeDeconstructed(craftStationType, bagId)
 
@@ -41,11 +62,14 @@ function DeconAssist:OnCraftingStarted(craftStationType)
     return
   end
 
+  --set up this crafting station var if first time
+  DeconAssist.savedVariables[craftStationType] = DeconAssist:SetUpSavedVarTable(DeconAssist.savedVariables[craftStationType])
+
   --d("Started crafting " .. craftStationType)
+
+  --reset transient variables
   DeconAssist.isCrafting = true
   DeconAssist.gotItems = {}
-
-  --Clear local bag store
   DeconAssist.itemsThatCouldBeDeconstructed = {}
 
   -- Store the items that could be deconstructed - i.e. backpack and bank
@@ -68,12 +92,22 @@ function DeconAssist:OnCraftingCompleted(craftStationType)
 
   --Save results from a deconstructed item
   if deconstructedItem ~= nil then
-    if DeconAssist.savedVariables[deconstructedItem] == nil then
-      DeconAssist.savedVariables[deconstructedItem] = {}
+
+    DeconAssist.savedVariables[craftStationType][deconstructedItem] = DeconAssist:SetUpSavedVarTable(DeconAssist.savedVariables[craftStationType][deconstructedItem])
+    if DeconAssist.savedVariables[craftStationType][deconstructedItem].Count == nil then
+      DeconAssist.savedVariables[craftStationType][deconstructedItem].Count = 1
+    else
+      DeconAssist.savedVariables[craftStationType][deconstructedItem].Count = DeconAssist.savedVariables[craftStationType][deconstructedItem].Count + 1
     end
 
-    for index, value in ipairs(DeconAssist.gotItems) do      
-      table.insert(DeconAssist.savedVariables[deconstructedItem], value)
+    DeconAssist.savedVariables[craftStationType][deconstructedItem].Items = DeconAssist:SetUpSavedVarTable(DeconAssist.savedVariables[craftStationType][deconstructedItem].Items)
+
+    for index, value in ipairs(DeconAssist.gotItems) do
+      if DeconAssist.savedVariables[craftStationType][deconstructedItem].Items[value] == nil then
+        DeconAssist.savedVariables[craftStationType][deconstructedItem].Items[value] = 1
+      else
+        DeconAssist.savedVariables[craftStationType][deconstructedItem].Items[value] = 1 + DeconAssist.savedVariables[craftStationType][deconstructedItem].Items[value]
+      end
     end
   end
 
