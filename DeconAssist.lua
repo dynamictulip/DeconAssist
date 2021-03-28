@@ -22,6 +22,10 @@ DeconAssist.default = {}
 
 --[[
   {
+    "position" = {
+        "left" = <x>,
+        "top" = <x>
+    }
     <crafting station type1> = {
       <item1> = {
         "count" = <x>
@@ -175,6 +179,17 @@ function DeconAssist:ShowUI(show)
 end
 function DeconAssist:ShowUI_buttonclick() DeconAssist:ShowUI(true) end
 function DeconAssist:HideUI_buttonclick() DeconAssist:ShowUI(false) end
+
+function DeconAssist:DeconAssistButton_MoveStart() d("Start moving") end
+
+function DeconAssist:DeconAssistButton_MoveStop()
+    d("Finished moving")
+    if DeconAssist.savedVariables.position == nil then
+        DeconAssist.savedVariables.position = {}
+    end
+    DeconAssist.savedVariables.position.left = DeconAssistButton:GetLeft()
+    DeconAssist.savedVariables.position.top = DeconAssistButton:GetTop()
+end
 
 function DeconAssist:Initialize()
     -- We'll need to know when crafting is happening
