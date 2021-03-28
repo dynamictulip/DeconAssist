@@ -18,7 +18,7 @@ DeconAssist = {}
 
 DeconAssist.name = "DeconAssist"
 DeconAssist.variableVersion = 3
-DeconAssist.default = {}
+DeconAssist.defaultVariableStructure = {}
 
 --[[
   {
@@ -174,7 +174,7 @@ function DeconAssist:OnInventoryChange(bagId, slotIndex, isNewItem,
 end
 
 function DeconAssist:ShowUI(show)
-    d("Trying to show " .. tostring(show))
+    -- d("Trying to show " .. tostring(show))
     DeconAssistHistory:SetHidden(not show)
 end
 function DeconAssist:ShowUI_buttonclick() DeconAssist:ShowUI(true) end
@@ -201,6 +201,10 @@ function DeconAssist:Initialize()
     EVENT_MANAGER:RegisterForEvent(self.name,
                                    EVENT_INVENTORY_SINGLE_SLOT_UPDATE,
                                    self.OnInventoryChange)
+    EVENT_MANAGER:AddFilterForEvent(self.name,
+                                    EVENT_INVENTORY_SINGLE_SLOT_UPDATE,
+                                    REGISTER_FILTER_INVENTORY_UPDATE_REASON,
+                                    INVENTORY_UPDATE_REASON_DEFAULT)
 
     -- initialise local variables
     DeconAssist.isCrafting = false
@@ -209,9 +213,7 @@ function DeconAssist:Initialize()
     DeconAssist.savedVariables = ZO_SavedVars:NewAccountWide(
                                      "DeconAssistSavedVariables",
                                      DeconAssist.variableVersion, nil,
-                                     DeconAssist.default)
-
-    -- DeconAssist:ShowUI(false)
+                                     DeconAssist.defaultVariableStructure)
 end
 
 function DeconAssist.OnAddOnLoaded(event, addonName)
