@@ -1,21 +1,22 @@
-DeconAssist = {}
-
 --[[
   Made by Sara (confuddled_squirrel)
 
   Features:
   - saves a record of mats gained from deconstructing items
+  - empty widow shown when pressing button
 
   Future features:
   - UI to see stats
   - Tooltip addition on item hover to show deconstruction mats probabilities
   - Consider using libSavedVars - https://github.com/silvereyes333/LibSavedVars
   - Option to see items in chat - use https://github.com/silvereyes333/LibLootSummary
+  - character specific visibility/screen position of button
+  - slash command to open window
 
   Known bugs:
   - will give strange results when deconstructing multiple items at a time
-]]
-
+]] -------------------DEFAULTS-------------------
+DeconAssist = {}
 DeconAssist.name = "DeconAssist"
 DeconAssist.variableVersion = 3
 DeconAssist.defaultVariableStructure = {}
@@ -37,12 +38,12 @@ DeconAssist.defaultVariableStructure = {}
     }
   }
 --]]
-
 function DeconAssist:SetUpSavedVarTable(var)
     if var == nil then var = {} end
     return var
 end
 
+-------------------BACKEND FUNCTIONS-------------------
 function DeconAssist:GetBagItemsThatCouldBeDeconstructed(craftStationType, bagId)
 
     local maxSlotNumber = GetBagSize(bagId)
@@ -172,7 +173,7 @@ function DeconAssist:OnInventoryChange(bagId, slotIndex, isNewItem,
         table.insert(DeconAssist.gotItems, link)
     end
 end
-
+-------------------UI FUNCTIONS-------------------
 function DeconAssist:ShowUI(show)
     -- d("Trying to show " .. tostring(show))
     DeconAssistHistory:SetHidden(not show)
@@ -191,6 +192,7 @@ function DeconAssist:DeconAssistButton_MoveStop()
     DeconAssist.savedVariables.position.top = DeconAssistButton:GetTop()
 end
 
+-------------------INITIALISATION-------------------
 function DeconAssist:Initialize()
     -- We'll need to know when crafting is happening
     EVENT_MANAGER:RegisterForEvent(self.name, EVENT_CRAFT_STARTED,
