@@ -1,18 +1,52 @@
 <GuiXml>
   <Controls>
-    <TopLevelControl name="DeconAssistIndicator" mouseEnabled="true" movable="true" clampedToScreen="true">
-      <Dimensions x="200" y="25" />
+    <TopLevelControl name="DeconAssistHistory" clampedToScreen="true" movable="true" mouseEnabled="true" hidden="true" resizeHandleSize="10">
+      <Dimensions x="200" y="100"/>
+      <Anchor point="CENTER" relativeTo="GUI_ROOT" relativePoint="CENTER" offsetX="-125" offsetY="-140" />
+      <Controls>
+        <Backdrop name="$(parent)_BG" inherits="ZO_DefaultBackdrop">
+          <AnchorFill/>
+        </Backdrop>
+        <Button name="$(parent)_hide" inherits="ZO_ButtonBehaviorClickSound">
+          <OnClicked>DeconAssist.HideUI_buttonclick()</OnClicked>
+          <Dimensions x="30" y="30" />
+          <Anchor point="TOPLEFT" relativeTo="$(parent)" relativePoint="TOPLEFT" offsetX="10" offsetY="10" />
+          <Textures
+                        normal    ="/esoui/art/buttons/decline_up.dds"
+                        pressed    ="/esoui/art/buttons/decline_down.dds"
+                        mouseOver  ="/esoui/art/buttons/decline_over.dds" />
+        </Button>
+        <Button name="$(parent)_clear" inherits="ZO_ButtonBehaviorClickSound">
+          <Dimensions x="40" y="40" />
+          <Anchor point="TOPRIGHT" relativeTo="$(parent)" relativePoint="TOPRIGHT" offsetX="-10" offsetY="10" />
+          <Textures
+                        normal    ="/esoui/art/help/help_tabicon_feedback_up.dds"
+                        pressed    ="/esoui/art/help/help_tabicon_feedback_down.dds "
+                        mouseOver  ="/esoui/art/help/help_tabicon_feedback_over.dds" />
+        </Button>
+
+        <EditBox name="$(parent)Box" inherits="ZO_DefaultEditMultiLine ZO_DefaultEditForDarkBackdrop">
+          <Anchor point="TOPLEFT" relativeTo="$(parent)" relativePoint="TOPLEFT" offsetX="50" offsetY="50"/>
+          <Anchor point="BOTTOMRIGHT" relativeTo="$(parent)" relativePoint="BOTTOMRIGHT" offsetX="50"/>
+        </EditBox>
+      </Controls>
+    </TopLevelControl>
+
+    <TopLevelControl name="DeconAssistButton" mouseEnabled="true" movable="true" clampedToScreen="true">
       <Anchor point="BOTTOM" relativeTo="GuiRoot" relativePoint="CENTER" offsetY="-20" />
- 
-      <OnMoveStop>
+
+      <!-- <OnMoveStop>
         DeconAssist.OnIndicatorMoveStop()
-      </OnMoveStop>
+      </OnMoveStop> -->
 
       <Controls>
-        <Label name="$(parent)Label" width="200" height="25" font="ZoFontWinH1" inheritAlpha="true" color="FF00FF"
-            wrapMode="TRUNCATE" verticalAlignment="TOP" horizontalAlignment="CENTER" text="Rocking!">
+        <Button name="$(parent)_openUI" inherits="ZO_ButtonBehaviorClickSound">
+          <OnClicked>DeconAssist.ShowUI_buttonclick()</OnClicked>
+          <Dimensions x="64" y="64" />
           <Anchor point="TOP" relativeTo="$(parent)" relativePoint="TOP" />
-        </Label>
+          <!-- <Textures normal="esoui/art/inventory/inventory_tabicon_armor_up.dds" pressed="esoui/art/inventory/inventory_tabicon_armor_down.dds" mouseOver="esoui/art/inventory/inventory_tabicon_armor_over.dds" /> -->
+          <Textures normal="esoui/art/treeicons/store_indexicon_fragments_up.dds" pressed="esoui/art/treeicons/store_indexicon_fragments_down.dds" mouseOver="esoui/art/treeicons/store_indexicon_fragments_over.dds" />
+        </Button>
       </Controls>
     </TopLevelControl>
   </Controls>

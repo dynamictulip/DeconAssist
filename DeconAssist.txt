@@ -6,3 +6,4 @@
 ## SavedVariables: DeconAssistSavedVariables
 
 DeconAssist.lua
+DeconAssist.xml
