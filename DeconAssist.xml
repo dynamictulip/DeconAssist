@@ -2,7 +2,7 @@
   <Controls>
     <!-- The window with all the information in it -->
     <TopLevelControl name="DeconAssistHistory" clampedToScreen="true" movable="true" mouseEnabled="true" hidden="true" resizeHandleSize="10">
-      <Dimensions x="200" y="100"/>
+      <Dimensions x="500" y="460"/>
       <Anchor point="CENTER" relativeTo="GUI_ROOT" relativePoint="CENTER" offsetX="-125" offsetY="-140" />
 
       <Controls>
@@ -13,7 +13,7 @@
         <Button name="$(parent)_hide" inherits="ZO_ButtonBehaviorClickSound">
           <OnClicked>DeconAssist.HideUI_buttonclick()</OnClicked>
           <Dimensions x="30" y="30" />
-          <Anchor point="TOPLEFT" relativeTo="$(parent)" relativePoint="TOPRIGHT" offsetX="10" offsetY="10" />
+          <Anchor point="TOPRIGHT" relativeTo="$(parent)" relativePoint="TOPRIGHT" offsetX="-10" offsetY="10" />
           <Textures
                         normal    ="/esoui/art/buttons/decline_up.dds"
                         pressed    ="/esoui/art/buttons/decline_down.dds"
@@ -21,7 +21,7 @@
         </Button>
         <!-- List headings -->
         <Label name="$(parent)Heading" font="ZoFontWindowTitle" color="CFDCBD" wrapMode="ELLIPSIS" verticalAlignment="CENTER" text="Deconstructed items">
-          <Anchor point="TOPLEFT" relativeTo="$(parent)" relativePoint="TOPLEFT" offsetX="16" offsetY="40"/>
+          <Anchor point="TOPLEFT" relativeTo="$(parent)" relativePoint="TOPLEFT" offsetX="16" offsetY="10"/>
         </Label>
         <!-- <Control name="$(parent)Headers">
           <Anchor point="TOPLEFT" relativeTo="$(parent)Heading" relativePoint="BOTTOMLEFT" offsetX="0" offsetY="16"/>
@@ -50,8 +50,8 @@
       </Controls>
     </TopLevelControl>
 
-    <!-- A row in the table
-    <Button name="DeconAssistHistory_row" virtual="true">
+    <!-- A row in the table -->
+    <Control name="DeconAssistHistory_row" virtual="true">
       <Dimensions y="30" />
       <Anchor point="RIGHT" relativeTo="$(parent)" />
       <Controls>
@@ -64,7 +64,7 @@
           <Dimensions x="128" y="32" />
         </Label>
       </Controls>
-    </Button> -->
+    </Control>
 
     <!-- Button that opens the window -->
     <TopLevelControl name="DeconAssistButton">

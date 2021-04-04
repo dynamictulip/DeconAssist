@@ -172,19 +172,20 @@ end
 local libScroll = LibScroll
 local function SetupDataRow(rowControl, data, scrollList)
     -- Do whatever you want/need to setup the control
-    rowControl:SetText(data.name)
-    rowControl:SetFont("ZoFontWinH4")
+    rowControl:GetNamedChild("DeconstructedItemName"):SetText(data.name)
+    rowControl:GetNamedChild("MatsGained"):SetText(data.name2)
+    --    rowControl:SetFont("ZoFontWinH4")
 end
 
 local function CreateScrollList()
     local scrollData = {
         name = "MyTestScrollList",
         parent = DeconAssistHistory,
-        -- width = 300,
+        width = 440,
         height = 200,
 
-        -- rowHeight = 23,
-        -- rowTemplate = "EmoteItRowControlTemplate",
+        rowHeight = 32,
+        rowTemplate = "DeconAssistHistory_row",
         setupCallback = SetupDataRow
         -- sortFunction = SortScrollList,
         -- selectTemplate = "EmoteItSelectTemplate",
@@ -200,18 +201,18 @@ local function CreateScrollList()
     -- Call the libraries CreateScrollList
     local scrollList = libScroll:CreateScrollList(scrollData)
     -- Anchor it however you want
-    scrollList:SetAnchor(TOPLEFT, DeconAssistHistory, TOPLEFT, 50, 80)
+    scrollList:SetAnchor(TOPLEFT, DeconAssistHistory, TOPLEFT, 20, 80)
 
     local dataItems = {
-        [1] = {name = "first"},
-        [2] = {name = "second", categoryId = 2},
-        [3] = {name = "third", categoryId = 2},
-        [4] = {name = "fourth", categoryId = 2},
-        [5] = {name = "fifth", categoryId = 3},
-        [6] = {name = "sixth", categoryId = 3},
-        [7] = {name = "seventh", categoryId = 7},
-        [8] = {name = "eigth", categoryId = 8},
-        [9] = {name = "nineth", categoryId = 9}
+        [1] = {name = "Thing", name2 = "first"},
+        [2] = {name = "Thing", name2 = "second", categoryId = 2},
+        [3] = {name = "Thing", name2 = "third", categoryId = 2},
+        [4] = {name = "Thing", name2 = "fourth", categoryId = 2},
+        [5] = {name = "Thing", name2 = "fifth", categoryId = 3},
+        [6] = {name = "Thing", name2 = "sixth", categoryId = 3},
+        [7] = {name = "Thing", name2 = "seventh", categoryId = 7},
+        [8] = {name = "Thing", name2 = "eigth", categoryId = 8},
+        [9] = {name = "Thing", name2 = "nineth", categoryId = 9}
     }
 
     -- Call Update to add the data items to the scrollList
