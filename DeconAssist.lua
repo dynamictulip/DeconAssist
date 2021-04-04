@@ -109,7 +109,7 @@ function DeconAssist:OnCraftingCompleted(craftStationType)
     if craftStationType == CRAFTING_TYPE_ALCHEMY or craftStationType ==
         CRAFTING_TYPE_PROVISIONING then return end
 
-    DeconAssist:ShowUI(true)
+    -- DeconAssist:ShowUI(true)
 
     -- Work out what was deconstructed
     local deconstructedItem = DeconAssist:WorkOutWhatWasDeconstructed(
@@ -174,23 +174,57 @@ function DeconAssist:OnInventoryChange(bagId, slotIndex, isNewItem,
     end
 end
 -------------------UI FUNCTIONS-------------------
-function DeconAssist:ShowUI(show)
-    -- d("Trying to show " .. tostring(show))
-    DeconAssistHistory:SetHidden(not show)
-end
+---Show/Hide UI
+function DeconAssist:ShowUI(show) DeconAssistHistory:SetHidden(not show) end
 function DeconAssist:ShowUI_buttonclick() DeconAssist:ShowUI(true) end
 function DeconAssist:HideUI_buttonclick() DeconAssist:ShowUI(false) end
 
+---Button screen positioning
 function DeconAssist:DeconAssistButton_MoveStart() d("Start moving") end
-
 function DeconAssist:DeconAssistButton_MoveStop()
     d("Finished moving")
-    if DeconAssist.savedVariables.position == nil then
-        DeconAssist.savedVariables.position = {}
+    if DeconAssist.savedVariables.button == nil then
+        DeconAssist.savedVariables.button = {}
     end
-    DeconAssist.savedVariables.position.left = DeconAssistButton:GetLeft()
-    DeconAssist.savedVariables.position.top = DeconAssistButton:GetTop()
+    if DeconAssist.savedVariables.button.position == nil then
+        DeconAssist.savedVariables.button.position = {}
+    end
+    DeconAssist.savedVariables.button.position.left =
+        DeconAssistButton:GetLeft()
+    DeconAssist.savedVariables.button.position.top = DeconAssistButton:GetTop()
 end
+
+-- ---Scroll list
+-- DeconAssistHistoryList = ZO_SortFilterList:Subclass()
+-- UnitList.defaults = {}
+
+-- function UnitList:New()
+-- 	local units = ZO_SortFilterList.New(self, ScrollListExampleMainWindow)
+-- 	units:Initialize()
+-- 	return units
+-- end
+
+-- function DeconAssist:SetUpDeconAssistHistory_row(control, data)
+--     control.label:SetText(data.label)
+
+--     control.data = data
+--     control.DeconstructedItemName = GetControl(control, "DeconstructedItemName")
+--     control.MatsGained = GetControl(control, "MatsGained")
+
+--     control.DeconstructedItemName:SetText(data.DeconstructedItemName)
+--     control.MatsGained:SetText(data.MatsGained)
+-- end
+
+-- function DeconAssist:InitialiseList()
+--     local function SetUpDeconAssistHistory_row(control, data)
+--         DeconAssist:SetUpDeconAssistHistory_row(control, data)
+--     end
+--     ZO_ScrollList_AddDataType(, 1,
+--                               "DeconAssistHistory_row", 30,
+--                               SetUpDeconAssistHistory_row)
+
+--     DeconAssistHistoryList.Initialize(self, self.control)
+-- end
 
 -------------------INITIALISATION-------------------
 function DeconAssist:Initialize()
