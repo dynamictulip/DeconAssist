@@ -87,8 +87,6 @@ function DeconAssist:OnCraftingStarted(craftStationType)
         DeconAssist:SetUpSavedVarTable(
             DeconAssist.savedVariables[craftStationType])
 
-    -- d("Started crafting " .. craftStationType)
-
     -- reset transient variables
     DeconAssist.isCrafting = true
     DeconAssist.gotItems = {}
@@ -101,15 +99,12 @@ function DeconAssist:OnCraftingStarted(craftStationType)
     DeconAssist.itemsThatCouldBeDeconstructed[BAG_BANK] =
         DeconAssist:GetBagItemsThatCouldBeDeconstructed(craftStationType,
                                                         BAG_BANK)
-
 end
 
 function DeconAssist:OnCraftingCompleted(craftStationType)
 
     if craftStationType == CRAFTING_TYPE_ALCHEMY or craftStationType ==
         CRAFTING_TYPE_PROVISIONING then return end
-
-    -- DeconAssist:ShowUI(true)
 
     -- Work out what was deconstructed
     local deconstructedItem = DeconAssist:WorkOutWhatWasDeconstructed(
@@ -157,9 +152,7 @@ function DeconAssist:OnCraftingCompleted(craftStationType)
         end
     end
 
-    -- d("Completed crafting " .. craftStationType)
     DeconAssist.isCrafting = false
-
 end
 
 function DeconAssist:OnInventoryChange(bagId, slotIndex, isNewItem,
@@ -173,9 +166,64 @@ function DeconAssist:OnInventoryChange(bagId, slotIndex, isNewItem,
         table.insert(DeconAssist.gotItems, link)
     end
 end
+
 -------------------UI FUNCTIONS-------------------
+---Scroll list
+local libScroll = LibScroll
+local function SetupDataRow(rowControl, data, scrollList)
+    -- Do whatever you want/need to setup the control
+    rowControl:SetText(data.name)
+    rowControl:SetFont("ZoFontWinH4")
+end
+
+local function CreateScrollList()
+    local scrollData = {
+        name = "MyTestScrollList",
+        parent = DeconAssistHistory,
+        -- width = 300,
+        height = 200,
+
+        -- rowHeight = 23,
+        -- rowTemplate = "EmoteItRowControlTemplate",
+        setupCallback = SetupDataRow
+        -- sortFunction = SortScrollList,
+        -- selectTemplate = "EmoteItSelectTemplate",
+        -- selectCallback = OnRowSelection,
+
+        -- dataTypeSelectSound = SOUNDS.BOOK_CLOSE,
+        -- hideCallback = OnRowHide,
+        -- resetCallback = OnRowReset,
+
+        -- categories = {1, 2}
+    }
+
+    -- Call the libraries CreateScrollList
+    local scrollList = libScroll:CreateScrollList(scrollData)
+    -- Anchor it however you want
+    scrollList:SetAnchor(TOPLEFT, DeconAssistHistory, TOPLEFT, 50, 80)
+
+    local dataItems = {
+        [1] = {name = "first"},
+        [2] = {name = "second", categoryId = 2},
+        [3] = {name = "third", categoryId = 2},
+        [4] = {name = "fourth", categoryId = 2},
+        [5] = {name = "fifth", categoryId = 3},
+        [6] = {name = "sixth", categoryId = 3},
+        [7] = {name = "seventh", categoryId = 7},
+        [8] = {name = "eigth", categoryId = 8},
+        [9] = {name = "nineth", categoryId = 9}
+    }
+
+    -- Call Update to add the data items to the scrollList
+    scrollList:Update(dataItems)
+end
+-- function DeconAssist:RefreshScrollList() scrollList:Update(dataItems) end
+
 ---Show/Hide UI
-function DeconAssist:ShowUI(show) DeconAssistHistory:SetHidden(not show) end
+function DeconAssist:ShowUI(show)
+    -- DeconAssist:RefreshScrollList()
+    DeconAssistHistory:SetHidden(not show)
+end
 function DeconAssist:ShowUI_buttonclick() DeconAssist:ShowUI(true) end
 function DeconAssist:HideUI_buttonclick() DeconAssist:ShowUI(false) end
 
@@ -193,38 +241,6 @@ function DeconAssist:DeconAssistButton_MoveStop()
         DeconAssistButton:GetLeft()
     DeconAssist.savedVariables.button.position.top = DeconAssistButton:GetTop()
 end
-
--- ---Scroll list
--- DeconAssistHistoryList = ZO_SortFilterList:Subclass()
--- UnitList.defaults = {}
-
--- function UnitList:New()
--- 	local units = ZO_SortFilterList.New(self, ScrollListExampleMainWindow)
--- 	units:Initialize()
--- 	return units
--- end
-
--- function DeconAssist:SetUpDeconAssistHistory_row(control, data)
---     control.label:SetText(data.label)
-
---     control.data = data
---     control.DeconstructedItemName = GetControl(control, "DeconstructedItemName")
---     control.MatsGained = GetControl(control, "MatsGained")
-
---     control.DeconstructedItemName:SetText(data.DeconstructedItemName)
---     control.MatsGained:SetText(data.MatsGained)
--- end
-
--- function DeconAssist:InitialiseList()
---     local function SetUpDeconAssistHistory_row(control, data)
---         DeconAssist:SetUpDeconAssistHistory_row(control, data)
---     end
---     ZO_ScrollList_AddDataType(, 1,
---                               "DeconAssistHistory_row", 30,
---                               SetUpDeconAssistHistory_row)
-
---     DeconAssistHistoryList.Initialize(self, self.control)
--- end
 
 -------------------INITIALISATION-------------------
 function DeconAssist:Initialize()
@@ -250,6 +266,10 @@ function DeconAssist:Initialize()
                                      "DeconAssistSavedVariables",
                                      DeconAssist.variableVersion, nil,
                                      DeconAssist.defaultVariableStructure)
+
+    -- Create the scrollList
+    local scrollList = CreateScrollList()
+
 end
 
 function DeconAssist.OnAddOnLoaded(event, addonName)

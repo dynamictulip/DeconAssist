@@ -13,7 +13,7 @@
         <Button name="$(parent)_hide" inherits="ZO_ButtonBehaviorClickSound">
           <OnClicked>DeconAssist.HideUI_buttonclick()</OnClicked>
           <Dimensions x="30" y="30" />
-          <Anchor point="TOPLEFT" relativeTo="$(parent)" relativePoint="TOPLEFT" offsetX="10" offsetY="10" />
+          <Anchor point="TOPLEFT" relativeTo="$(parent)" relativePoint="TOPRIGHT" offsetX="10" offsetY="10" />
           <Textures
                         normal    ="/esoui/art/buttons/decline_up.dds"
                         pressed    ="/esoui/art/buttons/decline_down.dds"
@@ -23,7 +23,7 @@
         <Label name="$(parent)Heading" font="ZoFontWindowTitle" color="CFDCBD" wrapMode="ELLIPSIS" verticalAlignment="CENTER" text="Deconstructed items">
           <Anchor point="TOPLEFT" relativeTo="$(parent)" relativePoint="TOPLEFT" offsetX="16" offsetY="40"/>
         </Label>
-        <Control name="$(parent)Headers">
+        <!-- <Control name="$(parent)Headers">
           <Anchor point="TOPLEFT" relativeTo="$(parent)Heading" relativePoint="BOTTOMLEFT" offsetX="0" offsetY="16"/>
           <Dimensions y="32" />
           <Controls>
@@ -46,11 +46,11 @@
         <Control name="$(parent)List" inherits="ZO_ScrollList">
           <Anchor point="TOPLEFT" relativeTo="$(parent)Headers" relativePoint="BOTTOMLEFT" />
           <Anchor point="BOTTOMRIGHT" offsetX="-12" offsetY="-64" />
-        </Control>
+        </Control> -->
       </Controls>
     </TopLevelControl>
 
-    <!-- A row in the table -->
+    <!-- A row in the table
     <Button name="DeconAssistHistory_row" virtual="true">
       <Dimensions y="30" />
       <Anchor point="RIGHT" relativeTo="$(parent)" />
@@ -64,7 +64,7 @@
           <Dimensions x="128" y="32" />
         </Label>
       </Controls>
-    </Button>
+    </Button> -->
 
     <!-- Button that opens the window -->
     <TopLevelControl name="DeconAssistButton">

@@ -3,6 +3,7 @@
 ## APIVersion: 100034
 ## Author: Sara (confuddled_squirrel)
 ## Description: Tracks what you get from deconstructing items
+## DependsOn: LibScroll
 ## SavedVariables: DeconAssistSavedVariables
 
 DeconAssist.lua
