@@ -177,6 +177,54 @@ local function SetupDataRow(rowControl, data, scrollList)
     --    rowControl:SetFont("ZoFontWinH4")
 end
 
+function DeconAssist:RefreshScrollList()
+    -- local dataItems = {
+    --     [1] = {name = "Thing", name2 = "first"},
+    --     [2] = {name = "Thing", name2 = "second", categoryId = 2},
+    --     [3] = {name = "Thing", name2 = "third", categoryId = 2},
+    --     [4] = {name = "Thing", name2 = "fourth", categoryId = 2},
+    --     [5] = {name = "Thing", name2 = "fifth", categoryId = 3},
+    --     [6] = {name = "Thing", name2 = "sixth", categoryId = 3},
+    --     [7] = {name = "Thing", name2 = "seventh", categoryId = 7},
+    --     [8] = {name = "Thing", name2 = "eigth", categoryId = 8},
+    --     [9] = {name = "Thing", name2 = "nineth", categoryId = 9}
+    -- }
+    d("Refresh list")
+    local dataItems = {}
+    for craftingStationType, craftingData in pairs(DeconAssist.savedVariables) do
+        d(craftingStationType)
+        if type(craftingStationType) == "number" then
+            d("in if")
+            for itemName, deconResults in pairs(craftingData) do
+                d(itemName)
+                table.insert(dataItems,
+                             {name = craftingStationType, name2 = itemName})
+            end
+        end
+    end
+
+    --[[
+  {
+    "position" = {
+        "left" = <x>,
+        "top" = <x>
+    }
+    <crafting station type1> = {
+      <item1> = {
+        "count" = <x>
+        "items" = {
+          <item1> = <x>,
+          <item2> = <x>,
+        }
+      }
+    }
+  }
+--]]
+
+    -- Call Update to add the data items to the scrollList
+    DeconAssistHistory.scrollList:Update(dataItems)
+end
+
 local function CreateScrollList()
     local scrollData = {
         name = "MyTestScrollList",
@@ -199,30 +247,17 @@ local function CreateScrollList()
     }
 
     -- Call the libraries CreateScrollList
-    local scrollList = libScroll:CreateScrollList(scrollData)
+    DeconAssistHistory.scrollList = libScroll:CreateScrollList(scrollData)
     -- Anchor it however you want
-    scrollList:SetAnchor(TOPLEFT, DeconAssistHistory, TOPLEFT, 20, 80)
+    DeconAssistHistory.scrollList:SetAnchor(TOPLEFT, DeconAssistHistory,
+                                            TOPLEFT, 20, 80)
 
-    local dataItems = {
-        [1] = {name = "Thing", name2 = "first"},
-        [2] = {name = "Thing", name2 = "second", categoryId = 2},
-        [3] = {name = "Thing", name2 = "third", categoryId = 2},
-        [4] = {name = "Thing", name2 = "fourth", categoryId = 2},
-        [5] = {name = "Thing", name2 = "fifth", categoryId = 3},
-        [6] = {name = "Thing", name2 = "sixth", categoryId = 3},
-        [7] = {name = "Thing", name2 = "seventh", categoryId = 7},
-        [8] = {name = "Thing", name2 = "eigth", categoryId = 8},
-        [9] = {name = "Thing", name2 = "nineth", categoryId = 9}
-    }
-
-    -- Call Update to add the data items to the scrollList
-    scrollList:Update(dataItems)
+    DeconAssist:RefreshScrollList()
 end
--- function DeconAssist:RefreshScrollList() scrollList:Update(dataItems) end
 
 ---Show/Hide UI
 function DeconAssist:ShowUI(show)
-    -- DeconAssist:RefreshScrollList()
+    if show then DeconAssist:RefreshScrollList() end
     DeconAssistHistory:SetHidden(not show)
 end
 function DeconAssist:ShowUI_buttonclick() DeconAssist:ShowUI(true) end
